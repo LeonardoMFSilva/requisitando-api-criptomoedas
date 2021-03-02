@@ -2,28 +2,49 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CoinMarketCap</title>
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
     <script type="text/javascript">
-    //Chave da api
-
+    //My API Key
     var apikey = {
-        key: "8addcf6b-9a9a-41d6-81ad-81a02af8a09a"
+        key_aleatoria: '3c0ecbe8-2042-4545-ad2a-1ccaee2674e5',
+        key: 'm1nha-k7y-3h-re5tr1t4'
     }
-    fetch("https://por-api.coinmarketcap.com/v1/cryptocurency/map?CMC_PRO_API_KEY=" + apikey)
+    //GET Fetch Requisition
+    fetch('https://pro-api.coinmarketcap.com/v1/cryptocurrency/map?CMC_PRO_API_KEY=' + apikey.key_aleatoria)
     .then((response) => {
-        if(!response.ok) throw new Error ("Erro ao executar a requisição, status" + response.status);
+        if(!response.ok) throw new Error('Erro ao executar a requisição, status ' + response.status);
         return response.json();
     })
     .then((api) => {
-        console.log(api)
+        var texto = "";
+        //GET 50 Coins and yours symbols
+        for(let i = 0; i < 10; i++){
+            //Show API information
+            texto = texto + `
+            <div class="media">
+                <img src="coin.jpg" class="align-self-center mr-3" alt="coin" width="100" height="60">
+                <div class="media-body">
+                    <h5 class="mt-2">Nome: ${api.data[i].name}</h5>
+                    <p>Criada em: ${api.data[i].first_historical_data}</p>
+                    <p>Sigla do símbolo utilizado: ${api.data[i].symbol}</p>
+                    <p>Cotações e valores: <a href="https://coinmarketcap.com/currencies/${api.data[i].slug}/" target="_blank">${api.data[i].name}</a></p>
+                </div>
+            </div>
+            `;
+            document.getElementById("coins").innerHTML = texto;
+        }
     })
     .catch((error) => {
         console.error(error.message);
     });
     </script>
+    <div class="p-3 mb-2 bg-dark text-light font-weight-bold text-center">Lista das 10 principais criptomoedas via API do Coin Market Cap</div>
+    <div class="d-flex p-3 bd-highlight">
+        <div id="coins"></div>
+    </div>
 </body>
 </html>
